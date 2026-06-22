@@ -72,5 +72,10 @@ def _load_env_yaml(env: str) -> dict:
 def get_settings() -> Settings:
     env = os.getenv("SMILECARE_ENV", "production")
     yaml_values = _load_env_yaml(env)
-    # env vars (already read by BaseSettings) win over yaml defaults
+    # Environment variables MUST override YAML. In pydantic-settings, explicit init kwargs
+    # beat env vars — so drop any YAML key that has an explicit env override (e.g. HEADED=false
+    # in CI, where a headed launch crashes with "Missing X server / $DISPLAY").
+    for key in list(yaml_values):
+        if os.getenv(key.upper()) is not None:
+            yaml_values.pop(key)
     return Settings(**yaml_values)
