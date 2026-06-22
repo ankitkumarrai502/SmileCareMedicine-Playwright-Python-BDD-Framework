@@ -71,6 +71,7 @@ jobs:
 
       - name: Upload test artifacts (traces / videos / screenshots)
         if: always()
+        continue-on-error: true # diagnostics are best-effort; never fail the run on upload
         uses: actions/upload-artifact@v4
         with:
           name: test-artifacts

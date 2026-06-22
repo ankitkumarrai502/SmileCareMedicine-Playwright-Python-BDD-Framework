@@ -60,12 +60,18 @@ class LoginPage(BasePage):
         """Quick snapshot oracle: the logged-out 'Login' nav link is not visible."""
         return not self.is_visible("login_nav_link", timeout_ms=3000)
 
-    def wait_until_logged_in(self, *, timeout_ms: int = 12000) -> bool:
+    def wait_until_logged_in(self, *, timeout_ms: int = 20000) -> bool:
         """Robust positive oracle: poll until the logged-out 'Login' nav link disappears.
 
-        Production redirect + header re-render can lag behind the click, so we wait
-        (auto-retrying) rather than snapshotting once — this kills the P1 smoke flake.
+        Production redirect + header re-render — and especially auth-state re-hydration
+        after a page reload — can lag behind the action, more so on slow/remote networks
+        (e.g. CI). So we first let the network settle, then wait (auto-retrying) for the
+        logged-out nav to go away rather than snapshotting once.
         """
+        try:
+            self.page.wait_for_load_state("networkidle")
+        except Exception:
+            pass
         try:
             expect(self.page.locator("header a[href='/login']").first).to_be_hidden(timeout=timeout_ms)
             return True

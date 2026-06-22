@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -35,6 +36,13 @@ for _d in (_ALLURE, _TRACES, _SHOTS, _VIDEOS, _METRICS):
     _d.mkdir(parents=True, exist_ok=True)
 
 _RESULTS: list[dict] = []
+
+
+def _safe(name: str) -> str:
+    """Filesystem/artifact-safe name. Scenario names can contain <, >, ', etc. (e.g. the
+    injection-payload case), which are invalid in Windows filenames AND rejected by the
+    GitHub upload-artifact action — sanitize before using a node name as a file path."""
+    return re.sub(r"[^A-Za-z0-9._-]+", "_", name)[:80]
 
 # Confirmed PRODUCT defects (filed in bug_reports/bug_house.xlsx). The tests assert the
 # CORRECT expected behavior, so they stay red against the live bug — we mark them xfail
@@ -124,8 +132,7 @@ def context(browser: Browser, settings: Settings, request: pytest.FixtureRequest
         ctx.tracing.start(screenshots=True, snapshots=True, sources=True)
     yield ctx
 
-    failed = getattr(request.node, "_failed", False)
-    name = request.node.name.replace("/", "_")[:80]
+    name = _safe(request.node.name)
     if settings.trace != "off":
         try:
             ctx.tracing.stop(path=str(_TRACES / f"{name}.zip"))
@@ -141,7 +148,7 @@ def page(context: BrowserContext, request: pytest.FixtureRequest) -> Page:
     if getattr(request.node, "_failed", False):
         try:
             shot = pg.screenshot(full_page=True)
-            pg.screenshot(path=str(_SHOTS / f"{request.node.name[:80]}.png"), full_page=True)
+            pg.screenshot(path=str(_SHOTS / f"{_safe(request.node.name)}.png"), full_page=True)
             allure.attach(shot, name="failure-screenshot",
                           attachment_type=allure.attachment_type.PNG)
             allure.attach(pg.url, name="final-url", attachment_type=allure.attachment_type.TEXT)
