@@ -115,6 +115,9 @@ def toggle_pw(login_page: LoginPage):
 
 @when("I reload the page")
 def reload_page(login_page: LoginPage):
+    # Confirm login actually completed (token persisted) BEFORE reloading — otherwise on a
+    # slow network the reload races the in-flight login and we'd test the wrong thing.
+    assert login_page.wait_until_logged_in(), "login did not complete before reload"
     login_page.page.reload(wait_until="networkidle")
 
 
