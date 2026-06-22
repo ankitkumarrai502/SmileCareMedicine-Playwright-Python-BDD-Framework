@@ -1,0 +1,19 @@
+# Local environment configuration for the SmileCareMedicine customer-facing suite.
+# Loaded by config/settings.py (to be implemented).
+
+base_url: "http://localhost:3000"
+pocketbase_proxy: "/hcgi/platform"
+pocketbase_direct: "http://localhost:8090"   # only if a test bypasses the proxy
+
+browser: "chromium"
+headed: true            # Browser agent shows tests running
+default_timeout_ms: 15000
+
+artifacts:
+  trace: "on-first-retry"
+  video: "retain-on-failure"
+  screenshot: "only-on-failure"
+
+healing:
+  enabled: true         # deterministic ranked-candidate fallback
+  ai_enabled: false     # optional Claude healer (set true for local triage)

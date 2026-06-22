@@ -1,0 +1,18 @@
+# Staging environment placeholder. Fill in when a hosted staging URL exists.
+# In CI, headed is false and AI healing stays off for speed/determinism.
+
+base_url: "https://staging.smilecaremedicine.example"   # TODO: real staging URL
+pocketbase_proxy: "/hcgi/platform"
+
+browser: "chromium"
+headed: false
+default_timeout_ms: 20000
+
+artifacts:
+  trace: "on-first-retry"
+  video: "retain-on-failure"
+  screenshot: "only-on-failure"
+
+healing:
+  enabled: true
+  ai_enabled: false

@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Secrets / env
+.env
+.env.local
+
+# Test artifacts & reports
+reports/allure-results/
+# generated Allure HTML site (regenerate with `make report`)
+reports/allure-report/
+reports/traces/
+reports/videos/
+reports/screenshots/
+reports/*.log
+reports/heal_events.json
+metrics/*.json
+
+# Playwright
+playwright-report/
+test-results/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Keep placeholder dirs tracked
+!**/.gitkeep

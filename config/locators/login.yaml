@@ -1,0 +1,56 @@
+# Ranked candidate selectors for the Login page (most stable first).
+# The healing layer (src/core/healing_locator.py) tries these in order; a lower-ranked
+# winner is logged as a heal signal. Grounded in the live DOM of /login.
+
+heading:
+  - "text=Welcome Back"
+  - "h1:has-text('Welcome Back')"
+  - "h2:has-text('Welcome Back')"
+
+email_input:
+  - "#email"
+  - "input[type='email']"
+  - "input[placeholder='name@example.com']"
+
+password_input:
+  - "#password"
+  - "input[type='password']"
+
+submit_button:
+  - "button:has-text('Log In')"
+  - "button[type='submit']"
+  - "role=button[name=/log\\s*in/i]"
+
+password_toggle:
+  - "xpath=//input[@id='password']/following-sibling::button"
+  - "div:has(> #password) button"
+  - "button:right-of(#password)"
+
+forgot_password_link:
+  - "a:has-text('Forgot Password')"
+  - "text=Forgot Password?"
+
+signup_link:
+  - "a:has-text('Sign up here')"
+  - "a[href='/signup']:has-text('Sign up')"
+
+# logged-OUT indicators (present before auth, gone after a successful login)
+login_nav_link:
+  - "header a[href='/login']:has-text('Login')"
+  - "a[href='/login']:has-text('Login')"
+
+signup_nav_link:
+  - "header a[href='/signup']:has-text('Sign Up')"
+  - "a[href='/signup']:has-text('Sign Up')"
+
+# invalid-credentials toast (short-lived; assert with a fast/polling wait)
+error_toast:
+  - "text=/invalid email or password/i"
+  - "[data-sonner-toast]"
+  - "[role='alert']"
+  - "li[role='status']"
+
+# cookie consent banner
+cookie_accept:
+  - "button:has-text('Accept')"
+  - "role=button[name=/accept/i]"

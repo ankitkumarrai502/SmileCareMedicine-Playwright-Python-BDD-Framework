@@ -1,0 +1,23 @@
+# Core automation stack
+playwright==1.49.1
+pytest==8.3.4
+pytest-bdd==8.1.0
+pytest-xdist==3.6.1          # parallel execution
+pytest-rerunfailures==15.0   # flaky-retry support
+
+# Reporting
+allure-pytest==2.13.5
+openpyxl==3.1.5              # bug-house Excel bug report (src/utils/bug_logger.py)
+
+# Config & data
+pydantic==2.10.4
+pydantic-settings==2.7.0
+PyYAML==6.0.2
+faker==33.1.0
+httpx==0.28.1                # PocketBase API setup/teardown
+
+# Optional AI healer / agent tooling
+anthropic==0.42.0
+
+# Tooling
+python-dotenv==1.0.1

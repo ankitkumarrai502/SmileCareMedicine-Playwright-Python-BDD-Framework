@@ -1,0 +1,27 @@
+# Production environment for the SmileCareMedicine customer-facing suite.
+# Live public site. SAFE for read-only flows (login, browse). Do NOT run
+# destructive flows (signup positive, order placement) here without disposable
+# data — there is no API teardown access on production.
+# Loaded by config/settings.py via SMILECARE_ENV=production.
+
+base_url: "https://www.smilecaremedicine.com"
+pocketbase_proxy: "/hcgi/platform"      # PocketBase reverse-proxy path (per AUT)
+pocketbase_direct: null                 # not reachable on prod
+
+browser: "chromium"
+headed: true                            # Browser agent shows tests running
+default_timeout_ms: 20000               # prod over the network: a bit more headroom
+
+artifacts:
+  trace: "on"                           # capture every run on prod for evidence
+  video: "retain-on-failure"
+  screenshot: "only-on-failure"
+
+healing:
+  enabled: true                         # deterministic ranked-candidate fallback
+  ai_enabled: false                     # optional Claude healer
+
+# Production data-safety guardrails honored by fixtures/agents:
+data_safety:
+  allow_destructive: false              # block signup-positive / order-create here
+  cleanup_via_api: false                # no PocketBase admin teardown on prod
