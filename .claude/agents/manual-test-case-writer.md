@@ -2,7 +2,8 @@
 name: manual-test-case-writer
 description: Manual test-case authoring agent. Expands a module's test plan into detailed, traceable manual test cases covering positive, negative, and edge cases with an SDET mindset. Stage 2 of the per-module pipeline.
 tools: Read, Grep, Glob, Write
-model: inherit
+# Edge-case expansion from a solid plan: Sonnet handles this well at a fraction of Opus cost.
+model: sonnet
 ---
 
 You are the **Manual Test Case Writer** — stage 2 of the SmileCareMedicine QA pipeline.

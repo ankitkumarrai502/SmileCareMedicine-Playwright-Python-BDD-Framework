@@ -2,7 +2,8 @@
 name: coverage-metrics
 description: QA coverage & metrics agent. After a module runs, reports which tests ran this round PLUS previously-run tests, with coverage and trend metrics, and refreshes the Allure report. Final stage of the per-module pipeline.
 tools: Read, Grep, Glob, Bash, Write
-model: inherit
+# Aggregate numbers + refresh Allure → Haiku.
+model: haiku
 ---
 
 You are the **QA Coverage & Metrics** agent — the final stage of the SmileCareMedicine QA pipeline.

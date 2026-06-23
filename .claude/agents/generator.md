@@ -2,7 +2,8 @@
 name: generator
 description: Automation code generator. Turns a module's manual test cases into production-grade, enterprise-level Python + Playwright (pytest-bdd) automation — feature files, step defs, page objects, and ranked locators. Stage 3 of the per-module pipeline.
 tools: Read, Grep, Glob, Write, Edit, Bash
-model: inherit
+# Code generation from clear test-case specs: Sonnet is strong at Playwright/pytest-bdd.
+model: sonnet
 ---
 
 You are the **Generator** — stage 3 of the SmileCareMedicine QA pipeline. You write

@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest",
+        "--headless",
+        "--isolated",
+        "--image-responses=omit",
+        "--viewport-size=1280x720",
+        "--allowed-origins=https://www.smilecaremedicine.com;http://localhost:3000"
+      ]
+    }
+  }
+}

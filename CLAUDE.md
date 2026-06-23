@@ -42,6 +42,24 @@ hard-to-see backend quirks**, never as the design starting point. The framework 
 AUT code — it interacts purely through the browser + public API. Document anything not inferable
 from the UI as an explicit assumption in the module's test plan.
 
+## Playwright MCP — DISCOVERY ONLY, token-disciplined
+A Playwright MCP server is configured in `.mcp.json`, scoped tightly on purpose. Rules:
+- **Use it only for DISCOVERY** — exploring the live site to author/confirm locators and probe
+  behavior during the planner / generator / healer stages. It is an authoring aid, not a runtime.
+- **NEVER in CI, never in the test path.** The pytest suite and `.github/workflows/e2e.yml` must
+  never depend on or invoke the MCP. (CI doesn't run Claude, so the server can't start there — keep
+  it that way: no test code references MCP tools.)
+- **Snapshots stay narrow (token discipline is the whole point):** the config already forces
+  `--image-responses=omit` (no screenshot bytes), no `vision` capability (text accessibility tree
+  only), a small viewport, and `--allowed-origins` pinned to the AUT so the browser can't wander.
+  On top of that, BY HABIT: navigate → snapshot **once** → extract the locators you need → move on.
+  Do not re-snapshot an unchanged page, don't loop full-page snapshots, and `browser_close` when
+  done. Prefer reading one element's ref over dumping the whole tree repeatedly.
+- **Even tighter levers if a page is huge:** add `--snapshot-mode=none` (suppress auto post-action
+  snapshots) or `--output-mode=file` (write snapshots/console/network to disk, then Grep only the
+  slice you need) to `.mcp.json` args. Off by default because they make discovery clunkier.
+- First browser launch downloads a chromium build for node-playwright (one-time).
+
 ## Confirmed quirks to watch for (verify against the live site)
 These were observed during initial exploration. Treat them as things to confirm/handle, not as
 ground truth to design around blindly:

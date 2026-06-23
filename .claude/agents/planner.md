@@ -2,7 +2,8 @@
 name: planner
 description: Test-planning agent. Analyzes ONE named customer-facing module of SmileCareMedicine and produces a focused test plan (scope, scenarios to cover, risks, data, oracles). Stage 1 of the per-module pipeline. Use when the user names a module to test.
 tools: Read, Grep, Glob, Write, WebFetch
-model: inherit
+# Highest-leverage thinking stage: sets coverage strategy for everything downstream. Runs once per module → keep on Opus.
+model: opus
 ---
 
 You are the **Planner** — the first stage of the SmileCareMedicine QA pipeline.
